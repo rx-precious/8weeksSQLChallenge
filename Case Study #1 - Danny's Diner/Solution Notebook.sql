@@ -43,7 +43,7 @@ ORDER BY 1;
 
 -- 6. Which item was purchased first by the customer after they became a member?
 WITH itemPurchasedRank AS (
-	SELECT a.customer_id, product_id, 
+	SELECT a.customer_id, product_id,
 		DENSE_RANK() OVER(PARTITION BY a.customer_id ORDER BY order_date) AS ProductRank
 	FROM dannys_diner.members a
 	JOIN dannys_diner.sales b ON a.customer_id = b.customer_id
@@ -57,7 +57,7 @@ ORDER BY 1;
 
 -- 7. Which item was purchased just before the customer became a member?
 WITH itemPurchasedRank AS (
-	SELECT a.customer_id, product_id, 
+	SELECT a.customer_id, product_id,
 		DENSE_RANK() OVER(PARTITION BY a.customer_id ORDER BY order_date DESC) ProductRank
 	FROM dannys_diner.members a
 	JOIN dannys_diner.sales b ON a.customer_id = b.customer_id
@@ -68,16 +68,18 @@ FROM itemPurchasedRank a
 JOIN dannys_diner.menu b ON a.product_ID = b.product_id AND productRank = 1;
 
 -- 8. What is the total items and amount spent for each member before they became a member?
-SELECT a.customer_id, COUNT(*) totalItems, SUM(c.price) AS amtSpent
+SELECT a.customer_id, COUNT(DISTINCT a.product_id) AS totalItems, SUM(c.price)
+	AS amtSpent
 FROM dannys_diner.sales a
-JOIN dannys_diner.members b ON a.customer_id = b.customer_id AND a.order_date < b.join_date
+JOIN dannys_diner.members b ON a.customer_id = b.customer_id AND a.order_date
+		< b.join_date
 JOIN dannys_diner.menu c ON a.product_id = c.product_id
 GROUP BY 1
 ORDER BY 1;
 
 -- 9.  If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
 WITH pointsTable AS (
-SELECT a.customer_id, a.product_id, 
+SELECT a.customer_id, a.product_id,
 	CASE
 		WHEN a.product_id = 1 THEN SUM(c.price) * 10 * 2
 		ELSE SUM(c.price) * 10
@@ -86,7 +88,7 @@ FROM dannys_diner.sales a
 JOIN dannys_diner.menu c ON a.product_id = c.product_id
 GROUP BY 1,2)
 
-SELECT customer_id, SUM(pointsEarned) totalPointsEarned
+SELECT customer_id, SUM(pointsEarned) AS totalPointsEarned
 FROM pointsTable
 GROUP BY 1
 ORDER BY 1;
@@ -94,18 +96,17 @@ ORDER BY 1;
 -- 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
 
 WITH pointsTable AS(
-	SELECT a.customer_id, join_date, order_date, a.product_id, 
+	SELECT a.customer_id, join_date, order_date, a.product_id,
 		CASE
-			WHEN order_date BETWEEN b.join_date AND b.join_date + INTERVAL 6 day 
+			WHEN order_date BETWEEN b.join_date AND b.join_date + INTERVAL 6 day
 				THEN c.price * 10 *2
 			WHEN a.product_id = 1 THEN c.price * 10 * 2
 			ELSE c.price * 10
 		END AS pointsEarned
     FROM dannys_diner.sales a
     JOIN dannys_diner.members b ON a.customer_id = b.customer_id AND order_date <= '2021-01-31'
-	JOIN dannys_diner.menu c ON a.product_id = c.product_id
-    )
-    
+	JOIN dannys_diner.menu c ON a.product_id = c.product_id)
+
 SELECT customer_id, SUM(pointsEarned) Points
 FROM pointsTable
 GROUP BY 1
@@ -114,7 +115,7 @@ ORDER BY 1;
 -- Bonus Questions
 
 WITH q1sol AS (
-	SELECT a.customer_id, a.order_date, c.product_name, c.price, 
+	SELECT a.customer_id, a.order_date, c.product_name, c.price,
 		CASE
 			WHEN order_date >= b.join_date THEN 'Y'
 			ELSE 'N'
@@ -124,8 +125,8 @@ LEFT JOIN dannys_diner.members b ON a.customer_id = b.customer_id
 JOIN dannys_diner.menu c ON a.product_id = c.product_id
 ORDER BY 1,2,4 DESC)
 
-SELECT *, 
-	CASE 
+SELECT *,
+	CASE
 		WHEN member = 'Y' THEN DENSE_RANK() OVER(PARTITION BY a.customer_id, member ORDER BY order_date)
 		ELSE NULL
     END AS ranking
