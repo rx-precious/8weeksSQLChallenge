@@ -53,7 +53,7 @@ ORDER BY 1;
 | C           |            2 |
 
 ### Answer:
-Customer B uniquely visited the diner more than the other customer with a
+Customer B uniquely visited the diner more than the other customers with a total days visited of 6 while Customer A and B visited 4 and 2 days respectively.
 
 # 3. What was the first item from the menu purchased by each customer?
 ```SQL
@@ -62,7 +62,7 @@ WITH productRank AS(
     ORDER BY order_date) AS productRank
     FROM dannys_diner.sales)
 ```
-A common table Expression was created which creates a ranking system that partitions the 'sales' table by 'customer_id' and order by 'order_date'.
+A common table Expression was created which creates a ranking system that partitions the 'sales' table by `customer_id` and order by `order_date`.
 
 | customer_id | product_id | order_date | productRank |
 |-------------|------------|------------|-------------|
