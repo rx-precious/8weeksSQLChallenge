@@ -12,7 +12,7 @@ SET extras = CASE
 			WHEN exclusions REGEXP '[0-9]' THEN exclusions
 			ELSE ' ' END;
 
--- Convert the distance and duration columns datatype to Float and integer repectively for easy arithmetic manipulation
+-- Convert the distance and duration columns datatype to Float and integer repectively for ease arithmetic manipulation
 UPDATE runner_orders
 SET distance = CAST((CASE
 			WHEN distance REGEXP 'km$' THEN LEFT(distance, POSITION('km' IN distance)-1)
@@ -40,7 +40,7 @@ SELECT COUNT(DISTINCT order_id) AS nCustomerOrders
 FROM pizza_runner.Customer_orders;
 
 -- 3. How many successful orders were delivered by each runner?
-SELECT runner_id, COUNT(*)
+SELECT runner_id, COUNT(*) AS nDelivered
 FROM pizza_runner.runner_orders
 WHERE distance > 0
 GROUP BY 1;
@@ -55,10 +55,11 @@ GROUP BY 1;
 
 
 -- 5. How many Vegetarian and Meatlovers were ordered by each customer?
-SELECT a.customer_id, pizza_name, COUNT(*)
+SELECT a.customer_id, b.pizza_name, COUNT(*) AS nPizza
 FROM pizza_runner.customer_orders a
 JOIN pizza_runner.pizza_names b ON a.pizza_id = b.pizza_id
-GROUP BY 1;
+GROUP BY 1,2
+ORDER BY 1;
 
 
 -- 6. What was the maximum number of pizzas delivered in a single order?
@@ -94,7 +95,7 @@ GROUP BY 1
 ORDER BY 1;
 
 -- 10. What was the volume of orders for each day of the week?
-SELECT dayname(order_time) AS DayofWeek, COUNT(*), order_time
+SELECT dayname(order_time) AS DayofWeek, COUNT(*) AS Count
 FROM pizza_runner.customer_orders
 GROUP BY 1;
 
@@ -112,7 +113,7 @@ GROUP BY 1;
 -- 2. What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?
 
 WITH duration AS(
-	SELECT runner_id,  timediff(CAST(b.pickup_time AS DATETIME), a.order_time) AS duration
+	SELECT runner_id,  timediff(b.pickup_time , a.order_time) AS duration
 	FROM pizza_runner.customer_orders a
 	JOIN pizza_runner.runner_orders b on a.order_id =b.order_id AND b.duration > 0)
 
@@ -123,7 +124,7 @@ GROUP BY 1 ;
 
 -- 3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
 WITH nPizzaTable AS(
-	SELECT a.order_id, COUNT(*) AS nPizza, timediff(CAST(b.pickup_time AS DATETIME), a.order_time) AS duration
+	SELECT a.order_id, COUNT(*) AS nPizza, timediff(b.pickup_time, a.order_time) AS duration
 	FROM pizza_runner.customer_orders a
 	JOIN pizza_runner.runner_orders b on a.order_id =b.order_id AND b.duration > 0
 	GROUP BY 1)
@@ -132,7 +133,7 @@ FROM nPizzaTable
 GROUP BY 1;
 
 -- 4. What was the average distance travelled for each customer?
-SELECT customer_id, CAST(AVG(distance) AS FLOAT)
+SELECT customer_id, ROUND(AVG(distance), 2)
 FROM pizza_runner.runner_orders a
 JOIN pizza_runner.customer_orders b ON a.order_id = b.order_id AND a.duration > 0
 GROUP BY 1 ;
