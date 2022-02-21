@@ -11,7 +11,7 @@ Because Danny had a few years of experience as a data scientist - he was very aw
 
 He has prepared for us an entity relationship diagram of his database design but requires further assistance to clean his data and apply some basic calculations so he can better direct his runners and optimise Pizza Runner’s operations.
 
-All data used for this analysis can be found [here](https://github.com/rx-precious/8weeksSQLChallenge/blob/decdb9cb7f5357bcf9565c5b3d53e3066011d593/Case%20Study%202%20-%20Pizza%20Runner/Dataset%20Notebook.sql) and solution notebook [here](https://github.com/rx-precious/8weeksSQLChallenge/blob/decdb9cb7f5357bcf9565c5b3d53e3066011d593/Case%20Study%202%20-%20Pizza%20Runner/Solution%20Notebook.sql)
+All data used for this analysis can be found [here](https://github.com/rx-precious/8weeksSQLChallenge/blob/decdb9cb7f5357bcf9565c5b3d53e3066011d593/Case%20Study%202%20-%20Pizza%20Runner/Dataset%20Notebook.sql) and solution notebook [here](https://github.com/rx-precious/8weeksSQLChallenge/blob/93a95af34e8125ebb52c555f1cceff85e61cf74f/Case%20Study%202%20-%20Pizza%20Runner/Solution%20Notebook.sql)
 
 # Summary
 - Pizza Runner in the range of the data provided have had 14 pizza orders with customers uniquely placing 10 orders of which only 8 was successfully delivered.
@@ -44,7 +44,7 @@ FROM pizza_runner.Customer_orders;
 |              10 |
 
 #### Answer
-- 10 unique orders were placed by customers
+- 10 unique orders were placed by customers.
 
 ### 3. How many successful orders were delivered by each runner?
 ```SQL
@@ -61,7 +61,7 @@ GROUP BY 1;
 |         3 |          1 |
 
 #### Answer
-- A total of 4, 3 and 1 orders were successfully delivered by Runner 1, 2 and 3
+- A total of 4, 3 and 1 orders were successfully delivered by Runner 1, 2 and 3.
 
 ### 4. How many of each type of pizza was delivered?
 ```SQL
@@ -89,9 +89,8 @@ JOIN pizza_runner.pizza_names b ON a.pizza_id = b.pizza_id
 GROUP BY 1,2
 ORDER BY 1;
 ```
-+-------------+------------+--------+
 | customer_id | pizza_name | nPizza |
-+-------------+------------+--------+
+|-------------|------------|--------|
 |         101 | Meatlovers |      2 |
 |         101 | Vegetarian |      1 |
 |         102 | Meatlovers |      2 |
@@ -100,7 +99,6 @@ ORDER BY 1;
 |         103 | Vegetarian |      1 |
 |         104 | Meatlovers |      3 |
 |         105 | Vegetarian |      1 |
-+-------------+------------+--------+
 
 
 #### Answer
@@ -138,7 +136,7 @@ GROUP BY 1;
 ```
 
 | customer_id | Changes | NoChanges |
-+-------------+---------+-----------+
+|-------------|---------|-----------|
 |         101 |       0 |         2 |
 |         102 |       0 |         3 |
 |         103 |       3 |         0 |
@@ -330,7 +328,7 @@ JOIN sDel b ON a.runner_id = b.runner_id
 GROUP BY 1;
 ```
 | runner_id | SucDeliveryPercentage |
-|-----------+-----------------------|
+|-----------|-----------------------|
 |         1 |                   100 |
 |         2 |                    75 |
 |         3 |                    50 |
