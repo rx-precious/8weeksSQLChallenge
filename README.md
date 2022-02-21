@@ -22,6 +22,3 @@ The Case studies contain datasets from the following domains:
 | 6 | [Clique Bait](https://8weeksqlchallenge.com/case-study-6/) | |
 | 7 | [Balanced Tree Clothing Co.](https://8weeksqlchallenge.com/case-study-7/) | |
 | 8 | [Fresh Segments](https://8weeksqlchallenge.com/case-study-8/)| |
-
-
-Table of content added to general readme to ease navigation in the repository.
