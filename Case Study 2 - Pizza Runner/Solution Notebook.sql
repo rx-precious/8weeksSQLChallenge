@@ -26,6 +26,10 @@ SET distance = CAST((CASE
 			WHEN cancellation IS NULL OR cancellation REGEXP 'null' THEN ' '
 			ELSE cancellation END;
 
+-- All orders and delivery dates are in year 2020 thus the runner registration date in 2021 might be a user input mistake. This is corrected below
+UPDATE runners
+SET registration_date = registration_date - INTERVAL 1 YEAR;
+
 SET SQL_SAFE_UPDATES = 1;
 
 
