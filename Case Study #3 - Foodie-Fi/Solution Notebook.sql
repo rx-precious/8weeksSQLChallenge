@@ -13,7 +13,7 @@ FROM a
 WHERE plan_id = 0 ;
 
 
-SELECT *, month(LEAD(start_date) OVER ()) - month(start_date) AS SubscriptionDays
+SELECT  customer_id, plan_name, month(LEAD(start_date) OVER ()) - month(start_date) AS SubscriptionMonths
 FROM foodie_fi.subscriptions a
 JOIN foodie_fi.plans b on a.plan_id = b.plan_id
 WHERE customer_id = 19;
@@ -60,36 +60,34 @@ FROM foodie_fi.subscriptions a
 CROSS JOIN lostCustomersTable b;
 
 -- How many customers have churned straight after their initial free trial - what percentage is this rounded to the nearest whole number?
-WITH a AS (
+WITH trialCusTable AS (
 	SELECT *
 	FROM foodie_fi.subscriptions
 	WHERE plan_id = 0),
-	b AS (
+	churnCusTable AS (
     SELECT *
     FROM foodie_fi.subscriptions
 	WHERE plan_id = 4),
-	c AS (
+	ChurnCountTable AS (
     SELECT COUNT(*) AS nChurned
-	FROM a
-	JOIN b ON a.customer_id = b.customer_id
+	FROM trialCusTable a
+	JOIN churnCusTable b ON a.customer_id = b.customer_id
 	WHERE datediff(b.start_date, a.start_date) <= 7)
 
-SELECT nChurned, ROUND(nCHurned/COUNT(DISTINCT a.customer_id) * 100, 0) AS PercentageChurned
-FROM foodie_fi.subscriptions a
-CROSS JOIN c;
+SELECT nChurned, ROUND(nCHurned/COUNT(DISTINCT customer_id) * 100, 0) AS PercentageChurned
+FROM foodie_fi.subscriptions, churnCountTable ;
 
 -- What is the number and percentage of customer plans after their initial free trial?
 
-WITH a AS (
+WITH newPlanTable AS (
 	SELECT customer_id, plan_id, LEAD(plan_id) OVER (PARTITION BY customer_id) AS newPlan
 	FROM foodie_fi.subscriptions),
-	b AS (
+	totalCustomerTable AS (
     SELECT COUNT(DISTINCT Customer_id) TotalCustomers
     FROM foodie_fi.subscriptions
 	)
 SELECT newPlan, COUNT(*) AS nConverted, ROUND(COUNT(*)/TotalCustomers * 100, 1) AS PercentageConverted
-FROM a
-CROSS JOIN b
+FROM newPlanTable, totalCustomerTable
 WHERE newPlan IS NOT NULL AND plan_id = 0
 GROUP BY 1;
 ;
@@ -120,7 +118,7 @@ WITH a AS (
 	FROM foodie_fi.subscriptions
 	WHERE year(start_date) = 2020)
 
-SELECT COUNT(*)
+SELECT COUNT(*) AS nCount
 FROM a
 WHERE newPlan = 3;
 
