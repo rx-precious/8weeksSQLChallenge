@@ -1,6 +1,6 @@
 # 8 Weeks SQL Challenge
 
-This repository contains my attempt at solving the case studies in the 8 weeks SQL Challenge put together by @DataWithDanny. The case studies resonates with my focus as a Supply chain professional as seen in some case studies which focus on improving customer service level `Case Study 2`, Supply chain strategy `Case Study 5` and product segmentation `Case Study 7`.
+This repository contains my attempt at solving the case studies in the 8 weeks SQL Challenge put together by @DataWithDanny. The case studies resonates with my focus as a Supply chain professional as seen in some case studies which focus on improving customer service level `Case Study 2`, Supply chain strategy `Case Study 5`, Sales analytics and Product segmentation `Case Study 7`.
 
 The Case studies contain datasets from the following domains:
 - Health analytics
@@ -20,7 +20,7 @@ The Case studies contain datasets from the following domains:
 | 4 | [Data Bank](https://8weeksqlchallenge.com/case-study-4/) | |
 | 5 | [Data Mart](https://8weeksqlchallenge.com/case-study-5/) | |
 | 6 | [Clique Bait](https://8weeksqlchallenge.com/case-study-6/) | |
-| 7 | [Balanced Tree Clothing Co.](https://8weeksqlchallenge.com/case-study-7/) | |
+| 7 | [Balanced Tree Clothing Co.](https://8weeksqlchallenge.com/case-study-7/) | [Here](https://github.com/rx-precious/8weeksSQLChallenge/blob/495a27d76a59dee3b99f5bd508f7b4f0adcc45e7/Case%20Study%20%237%20-%20Balanced%20Trees/README.md) |
 | 8 | [Fresh Segments](https://8weeksqlchallenge.com/case-study-8/)| |
 
 All codes are written using the MySQL implementation.
