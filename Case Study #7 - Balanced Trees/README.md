@@ -1,7 +1,12 @@
 ![Image](https://8weeksqlchallenge.com/images/case-study-designs/7.png)
 
 # **Problem Statement**
-The business generated a revenue of from the products of unique products. The transaction penetration for all products sold by Balanced Trees are around 49-52% which represents the probability of a product in a transaction.
+Balanced Tree Clothing Company prides themselves on providing an optimised range of clothing and lifestyle wear for the modern adventurer!
+
+Danny, the CEO of this trendy fashion company has asked you to assist the team’s merchandising teams analyse their sales performance and generate a basic financial report to share with the wider business.
+
+# **Summary**
+The business generated a revenue of 1.3M from the sales of products, a discount of 129K was given on the sales and an average of 6 products per transaction within the timeframe of the data supplied. The Blue Polo Shirt - Mens and Grey Fashion Jacket - Womens are the products that generated the most sales in the men and women category. The transaction penetration for all products sold by Balanced Trees are around 49-52%. The most common combination of any 3 products bought in a single transaction was - Grey Fashion Jacket - Womens, Teal Button Up Shirt - Mens and White Tee Shirt - Mens.
 
 ## High Level Sales Analysis
 #### 1. What was the total quantity sold for all products?
@@ -56,6 +61,8 @@ FROM UniqueProd;
 |           6 |
 
 #### 3. What are the 25th, 50th and 75th percentile values for the revenue per transaction?
+WIP
+
 #### 4. What is the average discount value per transaction?
 ```SQL
 WITH UniqueTransactionTable AS (
@@ -197,6 +204,7 @@ WHERE ranking = 1;
 |---------------|------------------------------|----------|
 | Mens          | Blue Polo Shirt - Mens       |   217683 |
 | Womens        | Grey Fashion Jacket - Womens |   209304 |
+
 #### 6. What is the percentage split of revenue by product for each segment?
 ```SQL
 WITH a AS (
@@ -269,12 +277,12 @@ WITH a AS (
 SELECT prod_id, COUNT(*) AS nTransactions
 FROM balanced_tree.sales
 GROUP BY 1),
-	b AS (
+	distinctTransaction AS (
     SELECT COUNT(DISTINCT txn_id) AS totalTransactions
     FROM balanced_tree.sales)
 
 SELECT a.prod_id, b.product_name, nTransactions/totalTransactions
-FROM a, b
+FROM a, distinctTransaction AS b
 JOIN balanced_tree.product_details c ON a.prod_id = c.product_id;
 ```
 | product_name                     | TransactionPenetration |
@@ -316,5 +324,3 @@ JOIN product_nameT c ON a.txn_id = c.txn_id
 | prodOne                      | prodTwo                     | prodThree              | timesCombined |
 |------------------------------|-----------------------------|------------------------|---------------|
 | Grey Fashion Jacket - Womens | Teal Button Up Shirt - Mens | White Tee Shirt - Mens |           352 |
-
-The most common combination of any 3 products bought in a single transaction was - Grey Fashion Jacket - Womens, Teal Button Up Shirt - Mens and White Tee Shirt - Mens
